@@ -1,14 +1,5 @@
-﻿#ifndef UI_H
-#define UI_H
+#pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include"lvgl.h"
 
-void my_ui_init(void);
-
-#ifdef __cplusplus
-} /*extern "C"*/
-#endif
-
-#endif // !UI_H
+void ui_init(void);

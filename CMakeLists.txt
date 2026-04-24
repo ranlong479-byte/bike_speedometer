@@ -77,8 +77,9 @@ else()
     list(APPEND MAIN_SOURCES src/main.c)
 endif()
 
+#注册.h文件
 target_include_directories(lvgl PUBLIC ${PROJECT_SOURCE_DIR}/src/ui)
-/*注册.c文件*/
+#注册.c文件
 list(APPEND MAIN_SOURCES src/ui/ui.c)
 
 if(NOT MSVC)

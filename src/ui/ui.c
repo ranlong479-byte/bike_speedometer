@@ -47,23 +47,26 @@ void ui_init(void)
 
     /*大儿子的相关配置*/
     lv_obj_t *child1 = lv_obj_create(obj);
-    lv_obj_set_pos(child1, 10,10);
+    lv_obj_set_pos(child1, 30,60);
     lv_obj_set_style_bg_color(child1, lv_color_hex(0xff0000), LV_PART_MAIN);
     lv_obj_set_style_border_width(child1, 0, LV_PART_MAIN);
     lv_obj_set_style_radius(child1, 30, LV_PART_MAIN);
     /*二儿子的相关配置*/
     lv_obj_t *child2 = lv_obj_create(obj);
     lv_obj_set_style_bg_color(child2, lv_color_hex(0x00ff00), LV_PART_MAIN);
-    lv_obj_set_x(child2, 10);
+    lv_obj_align_to(child2, child1,LV_ALIGN_OUT_BOTTOM_LEFT,90, -10);
     lv_obj_set_style_radius(child2, 30, LV_PART_MAIN);
     lv_obj_set_style_border_width(child2, 0, LV_PART_MAIN);
      /*三儿子的相关配置*/
     lv_obj_t *child3 = lv_obj_create(obj);
     lv_obj_set_style_bg_color(child3, lv_color_hex(0x0000ff), LV_PART_MAIN);
-    lv_obj_set_x(child3, 10);
+    lv_obj_align_to(child3, child2,LV_ALIGN_OUT_BOTTOM_LEFT,90, -10);
     lv_obj_set_style_radius(child3, 30, LV_PART_MAIN);
     lv_obj_set_style_border_width(child3, 0, LV_PART_MAIN);
 
-    lv_obj_align_to(child2, child1, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
-    lv_obj_align_to(child3, child2, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
+    /*交换红和绿的图层*/
+    // lv_obj_move_to_index(child1, 1);
+
+    /*交换红蓝*/
+    lv_obj_swap(child1, child3);
 }

@@ -1,44 +1,62 @@
 #include "ui.h"
 
-
-static void my_event_cb(lv_event_t * event)
+static void keypad_cd(lv_event_t *event)
 {
+    /*target 具体的按键*/
+    lv_obj_t *target_btn = (lv_obj_t *)lv_event_get_target(event);
 
-    /*使用指针接受传进来的时间指针*/
-    lv_obj_t* child=(lv_obj_t*)lv_event_get_user_data(event);
+    /*背景板*/
+    lv_obj_t *current_panel = (lv_obj_t *)lv_event_get_current_target(event);
 
-    lv_obj_set_style_bg_color(child, lv_color_hex(0x0000f), LV_PART_MAIN);
-    lv_obj_set_size(child, 30, 50);
+    /*输出结果*/
+    lv_obj_t *out_label = (lv_obj_t *)lv_event_get_user_data(event);
+
+    /*如果手指点在了背景板的空白版，target和current_target就是一个人*/
+    if(target_btn==current_panel)
+    {
+        return;
+    }
+    lv_obj_t *btn_label= lv_obj_get_child(target_btn, 0);
+    if(btn_label!=NULL)
+    {
+        const char *txt = lv_label_get_text(btn_label);
+        lv_label_set_text_fmt(out_label, "%s", txt);
+    }
 }
 void ui_init(void)
 {
-    // /*加载屏幕*/
-    // lv_obj_t* scr1= lv_obj_create(NULL);
-
-    // lv_obj_t* scr2= lv_obj_create(NULL);
-
-    // lv_screen_load(scr2);
-    //! 获取屏幕活动对像
+    /*放置顶部，专用展示按了什么*/
     lv_obj_t *screen = lv_screen_active();
-    /*创建元素对象*/
-    lv_obj_t * obj = lv_obj_create(screen);
 
-    /*设置元素样式*/
-    /*对元素大小进行设置*/
-    lv_obj_set_size(obj, 320, 480);
-    // lv_obj_set_width(obj, 400);
-    lv_obj_set_pos(obj, 100, 100);
-    lv_obj_set_style_pad_all(obj, 0, LV_PART_MAIN);
-    lv_obj_set_style_radius(obj, 0, LV_PART_MAIN);
-    lv_obj_set_style_border_width(obj, 0, LV_PART_MAIN);
-    lv_obj_set_style_bg_color(obj, lv_color_hex(0xffffff), LV_PART_MAIN);
-    lv_obj_t * child=lv_obj_create(obj);
-    lv_obj_set_size(child, 200, 300);
-    lv_obj_set_style_bg_color(child, lv_color_hex(0xff1111),LV_PART_MAIN);
+    lv_obj_t *out_label = lv_label_create(screen);
+    lv_label_set_text(out_label, "waiting...");
+    lv_obj_align(out_label, LV_ALIGN_TOP_MID, 0, 20);
 
+    lv_obj_set_style_bg_color(out_label, lv_color_hex(0x0022ff), LV_PART_MAIN);
 
-    lv_obj_add_event_cb(child, my_event_cb, LV_EVENT_CLICKED, child);
-    // my_component_t * child1=my_component_create(obj);
-    // my_component_set_size(child1, 200, 300);
+    /*创建大背景版*/
+    lv_obj_t *panel = lv_obj_create(screen);
+    lv_obj_set_size(panel, 240, 240);
+    lv_obj_align(panel, LV_ALIGN_CENTER, 0, 20);
 
+    /*开启灵活布局，让按键自动排布*/
+    lv_obj_set_flex_flow(panel, LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_set_flex_align(panel, LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+
+    /*注册回调*/
+    lv_obj_add_event_cb(panel, keypad_cd, LV_EVENT_CLICKED, out_label);
+
+    for (int i = 1; i <= 6; i++)
+    {
+        lv_obj_t *btn =lv_button_create(panel);
+        lv_obj_set_size(btn, 60, 60);
+
+        /*允许时间冒泡到父元素*/
+        lv_obj_add_flag(btn, LV_OBJ_FLAG_EVENT_BUBBLE);
+        /*给每个按键添加数字标签*/
+        lv_obj_t *label = lv_label_create(btn);
+
+        lv_label_set_text_fmt(label, "%d", i);
+        lv_obj_center(label);
+    }
 }

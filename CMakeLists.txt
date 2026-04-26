@@ -79,8 +79,10 @@ endif()
 
 #注册.h文件
 target_include_directories(lvgl PUBLIC ${PROJECT_SOURCE_DIR}/src/ui)
+target_include_directories(lvgl PUBLIC ${PROJECT_SOURCE_DIR}/src/ui/common)
 #注册.c文件
 list(APPEND MAIN_SOURCES src/ui/ui.c)
+list(APPEND MAIN_SOURCES src/ui/common/sm_common.c)
 
 if(NOT MSVC)
     list(APPEND MAIN_LIBS m pthread)

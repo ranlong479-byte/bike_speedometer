@@ -2,4 +2,4 @@
 
 #include"lvgl.h"
 
-void ui_init(void);
+void sm_ui_init(void);
